@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #gameCanvas {
+            border: 2px solid #000;
+        }
+        #themeSelector, #pauseButton, #instructions {
+            position: absolute;
+            top: 10px;
+        }
+        #themeSelector {
+            left: 10px;
+        }
+        #pauseButton {
+            left: 150px;
+        }
+        #instructions {
+            left: 250px;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #000;
+       deathScreen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <select id="themeSelector">
+        <option value="default">Default</option>
+        <option value="dark">Dark</option>
+        <option value="forest">Forest</option>
+        <option value="ocean">Ocean</option>
+    </select>
+    <button id="pauseButton">Pause</button>
+    <div id="instructions">
+        <h3>How to Play</h3>
+        <p>Use arrow keys to move the snake.</p>
+        <p>Eat food to grow and gain points.</p>
+        <p>Special Powerups:</p>
+        <ul>
+            <li>Red: +10 points</li>
+            <li>Blue: +50 points and grow</li>
+        </ul>
+    </div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="deathScreen">Game Over! Press F5 to Restart</div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const themeSelector = document.getElementById('themeSelector');
+        const pauseButton = document.getElementById('pauseButton');
+        const deathScreen = document.getElementById('deathScreen');
+
+        let snake = [{ x: 200, y: 200 }];
+        let direction = 'right';
+        let food = { x: 100, y: 100 };
+        let powerup = { x: 300, y: 300 };
+        let score = 0;
+        let theme = 'default';
+        let paused = false;
+        let gameOver = false;
+
+        function drawSnake() {
+            ctx.fillStyle = theme === 'dark' ? '#fff' : '#000';
+            snake.forEach(segment => {
+                ctx.fillRect(segment.x, segment.y, 10, 10);
+            });
+        }
+
+        function drawFood() {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(food.x, food.y, 10, 10);
+        }
+
+        function drawPowerup() {
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(powerup.x, powerup.y, 10, 10);
+        }
+
+        function moveSnake() {
+            if (paused || gameOver) return;
+
+            const head = { x: snake[0].x, y: snake[0].y };
+            switch (direction) {
+                case 'right': head.x += 10; break;
+                case 'left': head.x -= 10; break;
+                case 'up': head.y -= 10; break;
+                case 'down': head.y += 10; break;
+            }
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                score += 10;
+                food = { x: Math.floor(Math.random() * 40) * 10, y: Math.floor(Math.random() * 40) * 10 };
+            } else if (head.x === powerup.x && head.y === powerup.y) {
+                score += 50;
+                powerup = { x: Math.floor(Math.random() * 40) * 10, y: Math.floor(Math.random() * 40) * 10 };
+                snake.push({ x: snake[snake.length - 1].x, y: snake[snake.length - 1].y });
+            } else {
+                snake.pop();
+            }
+
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
+                gameOver = true;
+                deathScreen.style.display = 'flex';
+            }
+        }
+
+        function changeTheme() {
+            theme = themeSelector.value;
+            switch (theme) {
+                case 'default':
+                    document.body.style.backgroundColor = '#f0f0f0';
+                    break;
+                case 'dark':
+                    document.body.style.backgroundColor = '#333';
+                    break;
+                case 'forest':
+                    document.body.style.backgroundColor = '#228B22';
+                    break;
+                case 'ocean':
+                    document.body.style.backgroundColor = '#1E90FF';
+                    break;
+            }
+        }
+
+        function gameLoop() {
+            if (!paused && !gameOver) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawSnake();
+                drawFood();
+                drawPowerup();
+                moveSnake();
+                changeTheme();
+            }
+            setTimeout(gameLoop, 100);
+        }
+
+        window.addEventListener('keydown', e => {
+            switch (e.key) {
+                case 'ArrowRight': direction = 'right'; break;
+                case 'ArrowLeft': direction = 'left'; break;
+                case 'ArrowUp': direction = 'up'; break;
+                case 'ArrowDown': direction = 'down'; break;
+                case ' ': paused = !paused; break;
+            }
+        });
+
+        pauseButton.addEventListener('click', () => {
+            paused = !paused;
+            pauseButton.textContent = paused ? 'Resume' : 'Pause';
+        });
+
+        themeSelector.addEventListener('change', changeTheme);
+
+        function restartGame() {
+            [{ x: 200, y: 200 }];
+            direction = 'right';
+            food = { x: 100, y: 100 };
+            powerup = { x: 300, y: 300 };
+            score = 0;
+            gameOver = false;
+            deathScreen.style.display = 'none';
+        }
+
+        window.addEventListener('keydown', e => {
+            if (e.key === 'F5') {
+                restartGame();
+            }
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>
+
+</body>
+</html>
