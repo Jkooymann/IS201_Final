@@ -38,11 +38,11 @@ a:visited {
 
 .header_div {
     position: relative;
-    background-color: #c9b718; /* Khaki */
+    background-color: #fff066; /* Khaki */
     border: 2px solid #8b4513; /* Saddle Brown */
     padding: 5px;
     margin: 10px;
-    border-radius: 50px;
+    border-radius: 5px;
     right: 1px;
     left: 1px;
 }
