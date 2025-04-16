@@ -1,0 +1,48 @@
+body {
+  background-color: #008080; /* Teal color */
+}
+
+h1 {
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+h2 {
+    color: rgb(105, 20, 20);
+}
+
+a:visited {
+    color: rgb(106, 33, 146);
+}
+
+.link {
+    color: rgb(205, 98, 22);
+}
+
+.description_div {
+    background-color: #034cc1; /* Alice Blue */
+    border: 2px solid #4682b4; /* Steel Blue */
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.links_div {
+    background-color: #c9b718; /* Khaki */
+    border: 2px solid #8b4513; /* Saddle Brown */
+    padding: 1px;
+    margin: 1px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.header_div {
+    position: relative;
+    background-color: #aa1515; /* Khaki */
+    border: 2px solid #050200; /* Saddle Brown */
+    padding: 5px;
+    margin: 10px;
+    border-radius: 50px;
+    right: 1px;
+    left: 1px;
+}
