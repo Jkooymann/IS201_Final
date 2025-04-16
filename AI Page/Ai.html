@@ -3,14 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake Game</title>
     <style>
         body {
@@ -39,7 +31,8 @@
             background-color: #fff;
             padding: 10px;
             border: 1px solid #000;
-       deathScreen {
+        }
+        #deathScreen {
             display: none;
             position: absolute;
             top: 0;
@@ -48,7 +41,6 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
             color: #fff;
-            display: flex;
             justify-content: center;
             align-items: center;
             font-size: 24px;
@@ -131,10 +123,19 @@
                 snake.pop();
             }
 
-            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height || checkCollision()) {
                 gameOver = true;
                 deathScreen.style.display = 'flex';
             }
+        }
+
+        function checkCollision(){
+            for (let i = 1; i < snake.length; i++) {
+                if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function changeTheme() {
@@ -185,7 +186,7 @@
         themeSelector.addEventListener('change', changeTheme);
 
         function restartGame() {
-            [{ x: 200, y: 200 }];
+            snake = [{ x: 200, y: 200 }];
             direction = 'right';
             food = { x: 100, y: 100 };
             powerup = { x: 300, y: 300 };
@@ -202,8 +203,5 @@
 
         gameLoop();
     </script>
-</body>
-</html>
-
 </body>
 </html>
